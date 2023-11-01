@@ -1,0 +1,30 @@
+{
+  "name": "katarina/api2",
+  "description": "API2 project",
+  "require": {
+    "psr/container": "^1.1",
+    "zircote/swagger-php": "^4.7"
+  },
+  "require-dev": {
+    "phalcon/ide-stubs": "*",
+    "phalcon/migrations": "^3.0",
+    "phalcon/devtools": "^5.0"
+  },
+  "config": {
+    "migrationsDir": "db/migrations"
+  },
+  "autoload": {
+    "psr-4": {
+      "Phalcon\\": "vendor/phalcon/ide-stubs/src/",
+      "Phalcon\\Migrations\\": "vendor/phalcon/migrations/src"
+    }
+  },
+  "authors": [
+    {
+      "name": "katarina.pavlovic",
+      "email": "katarina.pavlovic@badin.rs"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
