@@ -1,16 +1,13 @@
 <?php
-//declare(strict_types=1);
 
-use http\Client\Request;
-use http\Client\Response;
+use Phalcon\Mvc\Controller;
 
-class IndexController extends ControllerBase
+class TestController extends Controller
 {
-
     public function indexAction()
     {
-        $response = new Response();
-        $request = new Request();
+        $request = $this->request;
+        $response = $this->response;
 
         if ($request->isGet()) {
             $data = "Test";
@@ -18,9 +15,7 @@ class IndexController extends ControllerBase
         } else {
             $response->setJsonContent(['message' => 'Samo GET zahtevi su dozvoljeni']);
         }
+
         return $response;
     }
-
-
 }
-
