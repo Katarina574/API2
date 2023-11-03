@@ -5,18 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="630e7b90-8103-4eea-9463-15ab85e7f5f7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/controllers/UploadController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/views/test/index.phtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/index2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config/router.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/router.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/IndexController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/IndexController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/TestController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/ApiController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/nginx/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/docker/nginx/nginx.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/UploadController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/UploadController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,7 +97,7 @@
       <updated>1698835694810</updated>
       <workItem from="1698835695833" duration="19665000" />
       <workItem from="1698919824514" duration="5824000" />
-      <workItem from="1699000922070" duration="10611000" />
+      <workItem from="1699000922070" duration="11454000" />
     </task>
     <servers />
   </component>

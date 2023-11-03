@@ -27,7 +27,9 @@ $(document).ready(function() {
             method: 'POST',
             data: { ime: ime },
             success: function(data) {
-                $('#rezultat').text('Uspesno ste poslali ime: ' + data);
+                // $('#rezultat').text('Uspesno ste poslali ime: ' + data);
+                $('#rezultat').text('Uspeh!' + ime);
+                // $('#rezultat').text(data);
             },
             error: function(error) {
                 $('#rezultat').text('Greska prilikom obrade podataka.');
