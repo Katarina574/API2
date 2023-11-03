@@ -7,5 +7,6 @@ class Korisnik extends Model
     public $ime;
     public $prezime;
     public $mejl;
+    public $temperatura;
 
 }
