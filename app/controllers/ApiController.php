@@ -1,13 +1,14 @@
 <?php
-
+use Phalcon\Http\Request;
+use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
 
-class TestController extends Controller
+class ApiController extends Controller
 {
     public function indexAction()
     {
-        $request = $this->request;
-        $response = $this->response;
+        $response = new Response();
+        $request = new Request();
 
         if ($request->isGet()) {
             $data = "Test";
