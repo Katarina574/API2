@@ -20,16 +20,20 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#posalji').click(function(event) {
         var URL = 'http://localhost:8086/upload';
-        var ime = $('#ime').val(); //preuzmi vrednost iz polja za unos imena
+        var ime = $('#ime').val(); // Preuzmi vrednost iz polja za unos imena
+        var prezime = $('#prezime').val(); // Preuzmi vrednost iz polja za unos prezimena
+        var mejl = $('#mejl').val(); // Preuzmi vrednost iz polja za unos mejla
 
         $.ajax({
             url: URL,
             method: 'POST',
-            data: { ime: ime },
+            data: {
+                ime: ime,
+                prezime: prezime,
+                mejl: mejl
+            },
             success: function(data) {
-                // $('#rezultat').text('Uspesno ste poslali ime: ' + data);
-                $('#rezultat').text('Uspeh!' + ime);
-                // $('#rezultat').text(data);
+                $('#rezultat').text('Uspeh! ' + ime + ' ' + prezime + ' ' + mejl);
             },
             error: function(error) {
                 $('#rezultat').text('Greska prilikom obrade podataka.');
