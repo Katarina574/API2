@@ -23,6 +23,7 @@ $(document).ready(function() {
         var ime = $('#ime').val(); // Preuzmi vrednost iz polja za unos imena
         var prezime = $('#prezime').val(); // Preuzmi vrednost iz polja za unos prezimena
         var mejl = $('#mejl').val(); // Preuzmi vrednost iz polja za unos mejla
+        var file = $('#file').val(); //uzimamo fajl iz forme
 
         $.ajax({
             url: URL,
@@ -30,7 +31,8 @@ $(document).ready(function() {
             data: {
                 ime: ime,
                 prezime: prezime,
-                mejl: mejl
+                mejl: mejl,
+                file: file
             },
             success: function(data) {
                 $('#rezultat').text('Uspeh! ' + ime + ' ' + prezime + ' ' + mejl);
