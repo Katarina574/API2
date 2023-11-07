@@ -1,9 +1,8 @@
-alert("Test da vidimo da li radi.");
+// alert("Test da vidimo da li radi.");
 
 $(document).ready(function() {
     $('#loadData').click(function() {
         var URL = 'http://localhost:8086/api';
-
         $.ajax({
             url: URL,
             method: 'GET',
@@ -17,25 +16,22 @@ $(document).ready(function() {
     });
 });
 
-$(document).ready(function() {
-    $('#posalji').click(function(event) {
-        var URL = 'http://localhost:8086/upload';
-        var ime = $('#ime').val(); // Preuzmi vrednost iz polja za unos imena
-        var prezime = $('#prezime').val(); // Preuzmi vrednost iz polja za unos prezimena
-        var mejl = $('#mejl').val(); // Preuzmi vrednost iz polja za unos mejla
-        var file = $('#file').val(); //uzimamo fajl iz forme
+
+$(function() {
+    $('button[type=submit]').click(function (event) {
+        event.preventDefault();
+
+        var form = this.form;
+        var data = new FormData(form);
 
         $.ajax({
-            url: URL,
-            method: 'POST',
-            data: {
-                ime: ime,
-                prezime: prezime,
-                mejl: mejl,
-                file: file
-            },
-            success: function(data) {
-                $('#rezultat').text('Uspeh! ' + ime + ' ' + prezime + ' ' + mejl);
+            type: 'POST',
+            url: 'http://localhost:8086/upload',
+            data: data,
+            processData: false,
+            contentType: false,
+                        success: function(data) {
+                $('#rezultat').text('Uspeh!');
             },
             error: function(error) {
                 $('#rezultat').text('Greska prilikom obrade podataka.');
@@ -43,3 +39,5 @@ $(document).ready(function() {
         });
     });
 });
+
+
