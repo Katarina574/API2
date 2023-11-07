@@ -7,23 +7,14 @@
 </head>
 <body>
 <button id="loadData">Dohvati Podatke</button>
-<h1>Unesite svoje ime:</h1>
-<input type="text" id="ime" placeholder="Ime" required>
-<br>
-<input type="text" id="prezime" placeholder="Prezime" required>
-<br>
-<input type="text" id="mejl" placeholder="Mejl" required>
-<br>
-<input type="file" id="file" name="file">
-<br>
-<button id="posalji">Sacuvaj</button>
+<form enctype="multipart/form-data" method="post" id="myForm">
+    <h1>Unesite svoje ime:</h1>
+    <input type="text" id="ime" name="ime" placeholder="Ime" required><br>
+    <input type="text" id="prezime" name="prezime" placeholder="Prezime" required><br>
+    <input type="text" id="mejl" name="mejl" placeholder="Mejl" required><br>
+    <input type="file" id="file" name="file"><br>
+    <button type="submit" id="posalji">Sacuvaj</button>
+</form>
 <div id="rezultat"></div>
-
-
-<!--<form method="post" action="../app/controllers/UploadController.php">-->
-<!--    <input type="text" name="ime" placeholder="Ime" required>-->
-<!--    <input type="submit" value="Prosledi ime">-->
-<!--</form>-->
-<!--<div id="rezultat"></div>-->
 </body>
 </html>
