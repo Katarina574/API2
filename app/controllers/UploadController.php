@@ -11,16 +11,15 @@ class UploadController extends Controller
             $ime = $_POST["ime"];
             $prezime = $_POST["prezime"];
             $mejl = $_POST["mejl"];
-            //uzmi fajl
-            $uploadedFile = $_FILES['file'];
-            //procitaj fajl
-            $fileData = file_get_contents($_FILES['file']['tmp_name']);
+
+            $tmpFilePath = $_FILES['file']['tmp_name'];
+            $fileData = file_get_contents($tmpFilePath);
 
             //vrednost za temperaturu uzimam od api-ja
             $url = 'https://api.openweathermap.org/data/2.5/weather?lat=43.3211301&lon=21.8959232&appid=60825efadeb08154a146559d1016ff34';
             $response = file_get_contents($url);
             $data = json_decode($response, true);
-//            echo $ime;
+
             //save to database
             $korisnik = new Korisnik();
             $korisnik->ime=$ime;
@@ -42,11 +41,6 @@ class UploadController extends Controller
                     'message' => 'Greska pri cuvanju korisnika.'
                 ];
             }
-
-//            $response = [
-//                'success' => true,
-//                'message' => 'Uspesno ste poslali ime, prezime i mejl: ' . $ime . $prezime . $mejl
-//            ];
 
             return $this->response->setJsonContent($response);
         } else {
