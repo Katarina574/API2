@@ -11,6 +11,11 @@ class UploadController extends Controller
             $ime = $_POST["ime"];
             $prezime = $_POST["prezime"];
             $mejl = $_POST["mejl"];
+            //uzmi fajl
+            $uploadedFile = $_FILES['file'];
+            //procitaj fajl
+            $fileData = file_get_contents($_FILES['file']['tmp_name']);
+
             //vrednost za temperaturu uzimam od api-ja
             $url = 'https://api.openweathermap.org/data/2.5/weather?lat=43.3211301&lon=21.8959232&appid=60825efadeb08154a146559d1016ff34';
             $response = file_get_contents($url);
@@ -22,6 +27,7 @@ class UploadController extends Controller
             $korisnik->prezime=$prezime;
             $korisnik->mejl=$mejl;
             $korisnik->temperatura = $data['main']['temp'];
+            $korisnik->file=$fileData;
 
             $success = $korisnik->save();
 
