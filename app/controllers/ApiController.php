@@ -12,11 +12,10 @@ class ApiController extends Controller
         $request = new Request();
 
         if ($request->isGet()) {
-            // Uslov - izlistaj sve korisnike (ili fajlove) koji nisu označeni kao obrisani, jer oni koji jesu umesto null imaju trenutno vreme - soft delete
-//            $korisnici = Korisnik::find([
-//                'conditions' => 'deletedAt IS NULL',
-//            ]);
-            $korisnici = Korisnik::find();
+            //nadji sve korisnike koji nisu oznaceni kao obrisani, jer oni koji jesu umesto null imaju trenutno vreme - soft delete
+            $korisnici = Korisnik::find([
+                'conditions' => 'deletedAt IS NULL',
+            ]);
             $sviKorisnici = [];
             foreach ($korisnici as $korisnik) {
                 $sviKorisnici[] = [
@@ -30,6 +29,31 @@ class ApiController extends Controller
             $response->setJsonContent($sviKorisnici);
         } else {
             $response->setJsonContent(['message' => 'Samo GET zahtevi su dozvoljeni']);
+        }
+
+        return $response;
+    }
+
+    public function deleteAction($id)
+    {
+        $response = new Response();
+        $request = new Request();
+
+        if ($request->isPut()) {
+            //nadji fajl po id-u
+            $korisnik = Korisnik::findFirst($id);
+
+            if ($korisnik) {
+                //posstavi deletedAt na trenutno vreme za "meko" brisanje
+                $korisnik->deletedAt = date('Y-m-d H:i:s');
+                $korisnik->save();
+
+                $response->setJsonContent(['message' => 'Fajl uspešno obrisan']);
+            } else {
+                $response->setJsonContent(['message' => 'Fajl nije pronađen']);
+            }
+        } else {
+            $response->setJsonContent(['message' => 'Samo DELETE zahtevi su dozvoljeni']);
         }
 
         return $response;
