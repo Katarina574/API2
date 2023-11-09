@@ -19,14 +19,16 @@ class UploadController extends Controller
             $url = 'https://api.openweathermap.org/data/2.5/weather?lat=43.3211301&lon=21.8959232&appid=60825efadeb08154a146559d1016ff34';
             $response = file_get_contents($url);
             $data = json_decode($response, true);
+            $tempK = $data['main']['temp'];
+            $tempC = $tempK - 273.15; //pretvori u celzijuse
 
             //save to database
             $korisnik = new Korisnik();
-            $korisnik->ime=$ime;
-            $korisnik->prezime=$prezime;
-            $korisnik->mejl=$mejl;
-            $korisnik->temperatura = $data['main']['temp'];
-            $korisnik->file=$fileData;
+            $korisnik->ime = $ime;
+            $korisnik->prezime = $prezime;
+            $korisnik->mejl = $mejl;
+            $korisnik->temperatura = $tempC;
+            $korisnik->file = $fileData;
 
             $success = $korisnik->save();
 
