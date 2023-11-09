@@ -31,7 +31,7 @@ $(function () {
             processData: false,
             contentType: false,
             success: function (data) {
-                $('#rezultat').text('Uspeh!');
+                $('#rezultat').text(JSON.stringify(data.message, null, 2));
             },
             error: function (error) {
                 $('#rezultat').text('Greska prilikom obrade podataka.');
