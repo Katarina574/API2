@@ -3,33 +3,43 @@
 <head>
     <title>Frontend</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="js/main.js"></script>
 </head>
 <body>
-<button id="loadData">Dohvati Podatke</button>
-<form enctype="multipart/form-data" method="post" id="myForm">
-    <h1>Unesite svoje ime:</h1>
-    <input type="text" id="ime" name="ime" placeholder="Ime" required><br>
-    <input type="text" id="prezime" name="prezime" placeholder="Prezime" required><br>
-    <input type="text" id="mejl" name="mejl" placeholder="Mejl" required><br>
-    <input type="file" id="file" name="file" accept=".doc,.docx,.xml,.png,.jpg,.pdf"><br>
-    <button type="submit" id="posalji">Sacuvaj</button>
-</form>
-<div id="rezultat"></div>
-<h2>Svi korisnici</h2>
-<table id="korisnici-table">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Ime</th>
-        <th>Prezime</th>
-        <th>Mejl</th>
-        <th>Temperatura</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <button id="loadData">Dohvati Podatke</button>
+            <h1>Unesite svoje ime:</h1>
+            <form enctype="multipart/form-data" method="post" id="myForm">
+                <div class="form-group">
+                <input type="text" id="ime" name="ime" placeholder="Ime" required><br>
+                <input type="text" id="prezime" name="prezime" placeholder="Prezime" required><br>
+                <input type="email" id="mejl" name="mejl" placeholder="Mejl" required><br>
+                <input type="file" id="file" name="file" accept=".doc,.docx,.xml,.png,.jpg,.pdf"><br>
+                <button type="submit" id="posalji" class="btn btn-outline-success">Sacuvaj</button>
+                </div>
+            </form>
+            <div class="alert alert-info" role="alert" id="rezultat"></div>
+            <h2>Svi korisnici</h2>
+            <table class="table" id="korisnici-table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Ime</th>
+                    <th scope="col">Prezime</th>
+                    <th scope="col">Mejl</th>
+                    <th scope="col">Temperatura</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div id="pagination" name="pagination"></div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

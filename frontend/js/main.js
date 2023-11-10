@@ -41,14 +41,21 @@ $(function () {
 });
 
 
-//preuzimanje podataka sa API-ja i generisanje tabele
+let currentPage = 1; //pocetna stranica (menja se na klik - povecava ili smanjuje)
+const usersPerPage = 5; //br entrija na strani
 function fetchAndDisplayData() {
-    const tableBody = document.querySelector('#korisnici-table tbody');
+    const tableBody = document.querySelector('#korisnici-table tbody'); //hvata table sa id-jem definisanim u html
+
+    const startIndex = (currentPage - 1) * usersPerPage; //u prvom 0
+    const endIndex = startIndex + usersPerPage; // u prvom 5 (slice ne uzima zadnji)
 
     fetch('http://localhost:8086/api')
         .then(response => response.json())
         .then(data => {
-            data.forEach(korisnik => {
+            const usersToDisplay = data.slice(startIndex, endIndex);
+            tableBody.innerHTML = '';
+
+            usersToDisplay.forEach(korisnik => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${korisnik.id}</td>
@@ -57,7 +64,7 @@ function fetchAndDisplayData() {
                     <td>${korisnik.mejl}</td>
                     <td>${korisnik.temperatura}</td>
                     <td>
-                        <button class="delete-button" data-id="${korisnik.id}">Obrisi</button>
+                        <button class="delete-button btn btn-danger" data-id="${korisnik.id}">Obrisi</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -81,13 +88,43 @@ function fetchAndDisplayData() {
                         });
                 });
             });
+            showPaginationControls(data.length);
         })
         .catch(error => {
             console.error('Greska prilikom preuzimanja podataka sa API-ja: ' + error);
         });
 }
-//prikazuje na ucitavanje stranice
+//prikazuje sve na ucitavanje stranice
 document.addEventListener('DOMContentLoaded', fetchAndDisplayData);
 
 
+function showPaginationControls(totalUsers) {
+    const paginationDiv = document.querySelector('#pagination');
+    const totalPages = Math.ceil(totalUsers / usersPerPage);
+
+    const paginationHTML = `
+        <div>Trenutna stranica: ${currentPage}</div>
+        <button class="badge badge-pill badge-info" id="prevPage">Prethodna</button>
+        <button class="badge badge-pill badge-info" id="nextPage">Sledeca</button>
+    `;
+
+    paginationDiv.innerHTML = paginationHTML;
+
+    const prevPageButton = document.querySelector('#prevPage');
+    const nextPageButton = document.querySelector('#nextPage');
+
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchAndDisplayData();
+        }
+    });
+
+    nextPageButton.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchAndDisplayData();
+        }
+    });
+}
 
