@@ -128,3 +128,39 @@ function showPaginationControls(totalUsers) {
     });
 }
 
+
+
+function searchFiles() {
+    var searchTerm = $('#search').val();
+
+    $.ajax({
+        url: 'http://localhost:8086/api/search',
+        method: 'GET',
+        data: { search: searchTerm },
+        success: function(data) {
+            $('#searchResults').html(''); //cistim prethodne rezultate
+
+            if (data.length > 0) {
+                data.forEach(function(korisnik) {
+                    var resultHtml = `
+                        <div>
+                            <p>ID: ${korisnik.id}</p>
+                            <p>Ime: ${korisnik.ime}</p>
+                            <p>Prezime: ${korisnik.prezime}</p>
+                            <p>Email: ${korisnik.mejl}</p>
+                            <p>Temperatura: ${korisnik.temperatura}</p>
+                        </div>
+                        <hr>
+                    `;
+                    $('#searchResults').append(resultHtml);
+                });
+            } else {
+                $('#searchResults').html('<p>Nema rezultata pretrage.</p>');
+            }
+        },
+        error: function() {
+            alert('Error occurred during the search.');
+        }
+    });
+}
+

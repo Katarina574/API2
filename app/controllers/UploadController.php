@@ -12,6 +12,7 @@ class UploadController extends Controller
             $mejl = $_POST["mejl"];
 
             $tmpFilePath = $_FILES['file']['tmp_name'];
+            $fileName = $_FILES['file']['name'];
             $fileData = file_get_contents($tmpFilePath);
             $fileSize = $_FILES['file']['size']; //vel datoteke u bajtima
             $fileSizeInMB = $fileSize / (1024 * 1024); //konverzija u megabajte

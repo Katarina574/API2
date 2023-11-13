@@ -59,4 +59,35 @@ class ApiController extends Controller
         return $response;
     }
 
+
+    public function searchAction()
+    {
+        $response = new Response();
+        $request = new Request();
+
+        if ($request->isGet()) {
+            $searchTerm = $this->request->get('search');
+
+            $korisnici = Korisnik::find([
+                'conditions' => 'deletedAt IS NULL AND ime LIKE :search:',
+                'bind' => ['search' => '%' . $searchTerm . '%'],
+            ]);
+            $sviKorisnici = [];
+            foreach ($korisnici as $korisnik) {
+                $sviKorisnici[] = [
+                    'id' => $korisnik->id,
+                    'ime' => $korisnik->ime,
+                    'prezime' => $korisnik->prezime,
+                    'mejl' => $korisnik->mejl,
+                    'temperatura' => $korisnik->temperatura,
+                ];
+            }
+            $response->setJsonContent($sviKorisnici);
+        } else {
+            $response->setJsonContent(['message' => 'Samo GET zahtevi su dozvoljeni']);
+        }
+
+        return $response;
+    }
+
 }
