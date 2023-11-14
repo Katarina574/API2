@@ -104,13 +104,15 @@ function showPaginationControls(totalUsers) {
 
     const paginationHTML = `
         <div>Trenutna stranica: ${currentPage}</div>
-        <button class="badge badge-pill badge-info" id="prevPage">Prethodna</button>
-        <button class="badge badge-pill badge-info" id="nextPage">Sledeca</button>
+        <button id="prevPage">Prethodna</button>
+        <button id="nextPage">Sledeca</button>
     `;
 
     paginationDiv.innerHTML = paginationHTML;
 
     const prevPageButton = document.querySelector('#prevPage');
+
+    // var prevPageButton = $('#prevPage');
     const nextPageButton = document.querySelector('#nextPage');
 
     prevPageButton.addEventListener('click', () => {
@@ -129,38 +131,41 @@ function showPaginationControls(totalUsers) {
 }
 
 
+$(document).ready(function() {
+    $('#search').on('input', function() {  //event listener za unos u polje pretrage
+        var searchTerm = $(this).val(); //uzmi unesenu vrednost
+        if (searchTerm === '') {
+            $('#autosuggestResults').html(''); //ako je vrednost prazna - nista nije uneto ili je sve obrisano, da se ociste rezultati prethodno dobijeni u suggestions
+        } else {
+            fetchAutosuggestResults(searchTerm); //pozovi .js f-ju
+        }
+    });
+});
 
-function searchFiles() {
-    var searchTerm = $('#search').val();
-
+function fetchAutosuggestResults(searchTerm) {
     $.ajax({
-        url: 'http://localhost:8086/api/search',
+        url: 'http://localhost:8086/api/autosuggest',
         method: 'GET',
         data: { search: searchTerm },
         success: function(data) {
-            $('#searchResults').html(''); //cistim prethodne rezultate
-
-            if (data.length > 0) {
-                data.forEach(function(korisnik) {
-                    var resultHtml = `
-                        <div>
-                            <p>ID: ${korisnik.id}</p>
-                            <p>Ime: ${korisnik.ime}</p>
-                            <p>Prezime: ${korisnik.prezime}</p>
-                            <p>Email: ${korisnik.mejl}</p>
-                            <p>Temperatura: ${korisnik.temperatura}</p>
-                        </div>
-                        <hr>
-                    `;
-                    $('#searchResults').append(resultHtml);
-                });
-            } else {
-                $('#searchResults').html('<p>Nema rezultata pretrage.</p>');
-            }
+            displayAutosuggestResults(data);
         },
         error: function() {
-            alert('Error occurred during the search.');
+            console.error('Error occurred during autosuggest.');
         }
     });
 }
 
+function displayAutosuggestResults(results) {
+    var autosuggestResultsDiv = $('#autosuggestResults');
+    autosuggestResultsDiv.html(''); //prazni div - npr svaki put kad dodamo novo slovo u search on registruje input (za koji proveri da li postoji ili ne preko php koda i rezultat prosledi u results) i pozove get i vrati success u funkciji iznad gde pozove ovu funkciju
+    //ako ima rezultata on ih prikaze, za svako novo slovo on ponavlja sve, zato sam ovim gore praznimo div jer svaki put prodje ispocetka i ispisuje ili rezultat iz if ili rezultat iz else (odn. da nema rez.)
+    if (results.length > 0) {
+        results.forEach(function(result) {
+            var resultString = JSON.stringify(result, null, 2); //da mi prikaze prave vrednosti a ne samo object
+            autosuggestResultsDiv.append('<p>' + resultString + '</p>');
+        });
+    } else {
+        autosuggestResultsDiv.append('<p>No autosuggest results.</p>');
+    }
+}

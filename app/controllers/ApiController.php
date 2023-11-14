@@ -59,12 +59,10 @@ class ApiController extends Controller
         return $response;
     }
 
-
-    public function searchAction()
+    public function autosuggestAction()
     {
         $response = new Response();
         $request = new Request();
-
         if ($request->isGet()) {
             $searchTerm = $this->request->get('search');
 
@@ -72,9 +70,9 @@ class ApiController extends Controller
                 'conditions' => 'deletedAt IS NULL AND ime LIKE :search:',
                 'bind' => ['search' => '%' . $searchTerm . '%'],
             ]);
-            $sviKorisnici = [];
+            $autosuggestResults = [];
             foreach ($korisnici as $korisnik) {
-                $sviKorisnici[] = [
+                $autosuggestResults[] = [
                     'id' => $korisnik->id,
                     'ime' => $korisnik->ime,
                     'prezime' => $korisnik->prezime,
@@ -82,12 +80,10 @@ class ApiController extends Controller
                     'temperatura' => $korisnik->temperatura,
                 ];
             }
-            $response->setJsonContent($sviKorisnici);
+            $response->setJsonContent($autosuggestResults);
         } else {
             $response->setJsonContent(['message' => 'Samo GET zahtevi su dozvoljeni']);
         }
-
         return $response;
     }
-
 }

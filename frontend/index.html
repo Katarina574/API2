@@ -9,15 +9,15 @@
 <body>
 <div class="container">
     <div class="row">
-
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="col-12">
             <form id="searchForm">
                 <label for="search">Search File:</label>
                 <input type="text" id="search" name="search">
-                <button type="button" onclick="searchFiles()">Search</button>
             </form>
+            <div id="autosuggestResults"></div>
             <div id="searchResults"></div>
-            <button id="loadData">Dohvati Podatke</button>
+            <br>
+            <button id="loadData">Prikazi sve korisnike</button>
             <h1>Unesite svoje ime:</h1>
             <form enctype="multipart/form-data" method="post" id="myForm">
                 <div class="form-group">

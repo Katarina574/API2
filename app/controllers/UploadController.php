@@ -22,7 +22,7 @@ class UploadController extends Controller
             $response = file_get_contents($url);
             $data = json_decode($response, true);
             $tempK = $data['main']['temp'];
-            $tempC = $tempK - 273.15; //pretvori u celzijuse
+            $tempC = round($tempK - 273.15); //pretvori u celzijuse
 
             if ($fileSizeInMB < 5) {
                 //save to database
