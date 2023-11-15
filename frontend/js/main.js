@@ -32,6 +32,7 @@ $(function () {
             contentType: false,
             success: function (data) {
                 $('#rezultat').text(JSON.stringify(data.message, null, 2));
+                // $('#rezultat').data.message;
             },
             error: function (error) {
                 $('#rezultat').text('Greska prilikom obrade podataka.');
@@ -39,7 +40,6 @@ $(function () {
         });
     });
 });
-
 
 let currentPage = 1; //pocetna stranica (menja se na klik - povecava ili smanjuje)
 const usersPerPage = 5; //br entrija na strani

@@ -1,62 +1,99 @@
 <?php
 
+use Phalcon\Http\Request;
+use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
 
 class UploadController extends Controller
 {
     public function indexAction()
     {
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST["ime"]) && !empty($_POST["prezime"]) && !empty($_POST["mejl"]) && !empty($_FILES['file']['tmp_name'])) {
-            $ime = $_POST["ime"];
-            $prezime = $_POST["prezime"];
-            $mejl = $_POST["mejl"];
+        $response = new Response();
+        $request = new Request();
 
-            $tmpFilePath = $_FILES['file']['tmp_name'];
-            $fileName = $_FILES['file']['name'];
-            $fileData = file_get_contents($tmpFilePath);
-            $fileSize = $_FILES['file']['size']; //vel datoteke u bajtima
-            $fileSizeInMB = $fileSize / (1024 * 1024); //konverzija u megabajte
+        if ($request->isPost() && $this->requiredFieldsNotEmpty()) {
+            $files = $this->request->getUploadedFiles('file');
 
-            //vrednost za temperaturu uzimam od api-ja
-            $url = 'https://api.openweathermap.org/data/2.5/weather?lat=43.3211301&lon=21.8959232&appid=60825efadeb08154a146559d1016ff34';
-            $response = file_get_contents($url);
-            $data = json_decode($response, true);
-            $tempK = $data['main']['temp'];
-            $tempC = round($tempK - 273.15); //pretvori u celzijuse
-
-            if ($fileSizeInMB < 5) {
-                //save to database
-                $korisnik = new Korisnik();
-                $korisnik->ime = $ime;
-                $korisnik->prezime = $prezime;
-                $korisnik->mejl = $mejl;
-                $korisnik->temperatura = $tempC;
-                $korisnik->file = $fileData;
-
-                $success = $korisnik->save();
-
-                if ($success) {
-                    $response = [
-                        'success' => true,
-                        'message' => "Fajl uspesno sacuvan."
-                    ];
+            if (count($files) === 1) {
+                $file = $files[0];
+                $fileSize = $file->getSize();
+                $fileSizeInMB = $fileSize / (1024 * 1024);
+                if ($fileSizeInMB < 5) {
+                    $response = $this->processAndSaveData($file);
                 } else {
                     $response = [
-                        'success' => false,
-                        'message' => 'Greska pri cuvanju korisnika.'
+                        'message' => 'Svi fajlovi moraju biti manji od 5MB, trenutna velicina fajla je: ' . $fileSizeInMB
                     ];
                 }
             } else {
                 $response = [
-                    'message' => 'Fajl mora biti manji od 5MB. Trenutni ima velicinu: ' . $fileSizeInMB
+                    'message' => 'Molim unesite samo jedan fajl.'
                 ];
             }
-            return $this->response->setJsonContent($response);
         } else {
             $response = [
-                'message' => 'Morate popuniti sva polja.'
+                'message' => 'Sva polja moraju biti popunjena.'
             ];
         }
+
         return $this->response->setJsonContent($response);
+    }
+
+    private function requiredFieldsNotEmpty()
+    {
+        $request = new Request();
+        return (
+            !empty($request->getPost("ime")) &&
+            !empty($request->getPost("prezime")) &&
+            !empty($request->getPost("mejl")) &&
+            $request->hasFiles()
+        );
+    }
+
+    private function processAndSaveData($file)
+    {
+        $ime = $this->request->getPost("ime");
+        $prezime = $this->request->getPost("prezime");
+        $mejl = $this->request->getPost("mejl");
+        $fileName = $file->getName();
+        $tempC = $this->getTemperatureFromApi();
+        $fileName = $file->getName();
+        $filePath = '/API2/Fajlovi/'. $fileName;
+        $file->moveTo($filePath);
+
+        $success = $this->saveToDatabase($ime, $prezime, $mejl, $tempC, $fileName, $filePath, $file);
+
+        if ($success) {
+            return [
+                'success' => true,
+                'message' => 'Korisnik uspesno sacuvan. ',
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Greska prilikom cuvanja korisnika.'
+            ];
+        }
+    }
+
+    private function getTemperatureFromApi()
+    {
+        $url = 'https://api.openweathermap.org/data/2.5/weather?lat=43.3211301&lon=21.8959232&appid=60825efadeb08154a146559d1016ff34';
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+        $tempK = $data['main']['temp'];
+        return round($tempK - 273.15);
+    }
+
+    private function saveToDatabase($ime, $prezime, $mejl, $tempC, $fileName, $filePath, $file)
+    {
+        $korisnik = new Korisnik();
+        $korisnik->ime = $ime;
+        $korisnik->prezime = $prezime;
+        $korisnik->mejl = $mejl;
+        $korisnik->temperatura = $tempC;
+        $korisnik->file = $filePath;
+
+        return $korisnik->save();
     }
 }
