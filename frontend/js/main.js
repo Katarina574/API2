@@ -66,10 +66,15 @@ function fetchAndDisplayData() {
                     <td>
                         <button class="delete-button btn btn-danger" data-id="${korisnik.id}">Obrisi</button>
                     </td>
+                    <td>
+                        <button class="download-button btn btn-success" data-id="${korisnik.id}">Preuzmi fajl</button>
+                    </td>
                 `;
                 tableBody.appendChild(row);
                 //event listener za dugme obrisi za svakog korisnika
                 const deleteButton = row.querySelector('.delete-button');
+                const downloadButton = row.querySelector('.download-button');
+
                 deleteButton.addEventListener('click', function () {
                     const userId = korisnik.id;
                     fetch('http://localhost:8086/api/delete/' + userId, {
@@ -87,13 +92,28 @@ function fetchAndDisplayData() {
                             console.error('Greska prilikom brisanja korisnika: ' + error);
                         });
                 });
+                downloadButton.addEventListener('click', function () {
+                    const userId = korisnik.id;
+                    downloadFile(userId);
+                });
             });
+
             showPaginationControls(data.length);
         })
         .catch(error => {
             console.error('Greska prilikom preuzimanja podataka sa API-ja: ' + error);
         });
 }
+
+
+function downloadFile(userId) {
+    const downloadUrl = `http://localhost:8086/api/download/${userId}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = downloadUrl;
+    downloadLink.click();
+}
+
+
 //prikazuje sve na ucitavanje stranice
 document.addEventListener('DOMContentLoaded', fetchAndDisplayData);
 

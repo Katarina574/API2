@@ -86,4 +86,19 @@ class ApiController extends Controller
         }
         return $response;
     }
+
+
+    public function downloadAction($userId)
+    {
+        $response = new Response();
+
+        $korisnik = Korisnik::findFirst($userId);
+        $filePath = $korisnik->file;
+
+        $response->setHeader('Content-Disposition', 'attachment; filename="' . $filePath . '"');
+        $response->setContent(file_get_contents($filePath));
+
+        return $response;
+    }
+
 }
