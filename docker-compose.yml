@@ -31,6 +31,7 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - .:/API2
+      - my_data_volume:/API2/Fajlovi
     networks:
       - api2_network
     depends_on:
@@ -70,4 +71,5 @@ services:
       - api2_network
 
 volumes:
+  my_data_volume:
   mysql:
