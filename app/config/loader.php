@@ -11,3 +11,10 @@ $loader->setDirectories(
         $config->application->modelsDir
     ]
 )->register();
+
+$loader->setNamespaces(
+    [
+        'App\Repositories' => APP_PATH . '/repositories/',
+        'App\Services' => APP_PATH . '/services/',
+    ]
+);
