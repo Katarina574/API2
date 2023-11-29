@@ -1,13 +1,17 @@
 <?php
 namespace App\Services;
 use Phalcon\Http\Request;
+use App\Repositories\UserRepository;
 
 class FileService
 {
     private UserService $userService;
-    public function __construct(UserService $userService)
+    private UserRepository $userRepository;
+
+    public function __construct(UserService $userService, UserRepository $userRepository)
     {
         $this->userService = $userService;
+        $this->userRepository = $userRepository;
     }
     private function requiredFieldsNotEmpty()
     {

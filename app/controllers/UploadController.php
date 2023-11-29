@@ -2,16 +2,23 @@
 
 use App\Services\FileService;
 use App\Services\UserService;
+use App\Repositories\UserRepository;
 use Phalcon\Http\Request;
 use \Phalcon\Mvc\Controller;
+
 class UploadController extends Controller
 {
+    private FileService $fileService;
+
+    public function onConstruct()
+    {
+        $userRepository = new UserRepository();
+        $userService = new UserService($userRepository);
+        $this->fileService = new FileService($userService, $userRepository);
+    }
+
     public function indexAction()
     {
-        $us = new UserService();
-        $this->fileService = new FileService($us);
-        $this->userService = new UserService();
-
         $response = [];
         $request = new Request();
 
