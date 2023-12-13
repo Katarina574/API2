@@ -2,6 +2,7 @@
 
 use App\Services\FileService;
 use App\Services\UserService;
+use App\Services\WeatherService;
 use App\Repositories\UserRepository;
 use Phalcon\Http\Request;
 use \Phalcon\Mvc\Controller;
@@ -14,7 +15,8 @@ class UploadController extends Controller
     {
         $userRepository = new UserRepository();
         $userService = new UserService($userRepository);
-        $this->fileService = new FileService($userService, $userRepository);
+        $weatherService = new WeatherService();
+        $this->fileService = new FileService($userService, $userRepository, $weatherService);
     }
 
     public function indexAction()
