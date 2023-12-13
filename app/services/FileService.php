@@ -25,36 +25,36 @@ class FileService
     }
     public function processAndSaveFile($file, $ime, $prezime, $mejl)
     {
-        if ($this->requiredFieldsNotEmpty($ime, $prezime, $mejl, $file)) {
-            $tempC = $this->getTemperatureFromApi();
-            $fileName = $file->getName();
-            $filePath = '/API2/Fajlovi/' . $fileName;
-
-            try {
-                $file->moveTo($filePath);
-                $success = $this->saveToDatabase($ime, $prezime, $mejl, $tempC, $fileName, $filePath);
-
-                if ($success) {
-                    return [
-                        'success' => true,
-                        'message' => 'Korisnik uspešno sačuvan.',
-                    ];
-                } else {
-                    return [
-                        'success' => false,
-                        'message' => 'Greška prilikom čuvanja korisnika.'
-                    ];
-                }
-            } catch (\Exception $e) {
-                return [
-                    'success' => false,
-                    'message' => 'Greška prilikom obrade datoteke: ' . $e->getMessage()
-                ];
-            }
-        } else {
+        if (!$this->requiredFieldsNotEmpty($ime, $prezime, $mejl, $file)) {
             return [
                 'success' => false,
-                'message' => 'Nisu ispunjeni svi obavezni podacii.'
+                'message' => 'Nisu ispunjeni svi obavezni podaci.'
+            ];
+        }
+
+        $tempC = $this->getTemperatureFromApi();
+        $fileName = $file->getName();
+        $filePath = BASE_PATH . '/Fajlovi/' . $fileName;
+
+        try {
+            $file->moveTo($filePath);
+            $success = $this->saveToDatabase($ime, $prezime, $mejl, $tempC, $fileName, $filePath);
+
+            if ($success) {
+                return [
+                    'success' => true,
+                    'message' => 'Korisnik uspešno sačuvan.',
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Greška prilikom čuvanja korisnika.'
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Greška prilikom obrade datoteke: ' . $e->getMessage()
             ];
         }
     }
