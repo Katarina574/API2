@@ -14,9 +14,7 @@ class UploadController extends Controller
     public function onConstruct()
     {
         $userRepository = new UserRepository();
-        $userService = new UserService($userRepository);
-        $weatherService = new WeatherService();
-        $this->fileService = new FileService($userService, $userRepository, $weatherService);
+        $this->fileService = new FileService($userRepository);
     }
 
     public function indexAction()

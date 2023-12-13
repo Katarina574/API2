@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use Phalcon\Http\Request;
+//use Phalcon\Messages\Message;
 use App\Repositories\UserRepository;
 
 class FileService
@@ -9,11 +10,11 @@ class FileService
     private UserRepository $userRepository;
     private WeatherService $weatherService;
 
-    public function __construct(UserService $userService, UserRepository $userRepository, WeatherService $weatherService)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->userService = $userService;
         $this->userRepository = $userRepository;
-        $this->weatherService = $weatherService;
+        $this->userService = new UserService($userRepository);
+        $this->weatherService = new WeatherService();
     }
     private function requiredFieldsNotEmpty()
     {
@@ -56,7 +57,7 @@ class FileService
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Greška prilikom obrade datoteke: ' . $e->getMessage()
+                'message' => 'Greška! ' . $e->getMessage()
             ];
         }
     }
@@ -72,7 +73,16 @@ class FileService
 
     private function saveToDatabase($ime, $prezime, $mejl, $tempC, $fileName, $filePath)
     {
-        $this->userService->saveUser($ime, $prezime, $mejl, $tempC, $fileName, $filePath);
+        $korisnik = $this->userService->saveUser($ime, $prezime, $mejl, $tempC, $fileName, $filePath);
+
+        if ($korisnik === false) {
+            return [
+                'success' => false,
+                'message' => 'Greška prilikom čuvanja korisnika.',
+            ];
+        }
+
         return true;
     }
+
 }
