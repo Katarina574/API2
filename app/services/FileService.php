@@ -1,8 +1,10 @@
 <?php
 namespace App\Services;
 use Phalcon\Http\Request;
-//use Phalcon\Messages\Message;
+use App\Exceptions\FileUploadException;
 use App\Repositories\UserRepository;
+
+require_once __DIR__ . '/../exceptions/FileUploadException.php';
 
 class FileService
 {
@@ -16,23 +18,24 @@ class FileService
         $this->userService = new UserService($userRepository);
         $this->weatherService = new WeatherService();
     }
-    private function requiredFieldsNotEmpty()
+    private function requiredFieldsNotEmpty($ime, $prezime, $mejl, $file)
     {
         $request = new Request();
         return (
-            !empty($request->getPost("ime")) &&
-            !empty($request->getPost("prezime")) &&
-            !empty($request->getPost("mejl")) &&
+            !empty($ime) &&
+            !empty($prezime) &&
+            !empty($mejl) &&
             $request->hasFiles()
         );
     }
+
+    /**
+     * @throws FileUploadException
+     */
     public function processAndSaveFile($file, $ime, $prezime, $mejl)
     {
         if (!$this->requiredFieldsNotEmpty($ime, $prezime, $mejl, $file)) {
-            return [
-                'success' => false,
-                'message' => 'Nisu ispunjeni svi obavezni podaci.'
-            ];
+            throw new FileUploadException('Nisu ispunjeni svi obavezni podaci.');
         }
 
         $tempC = $this->weatherService->getTemperature();
@@ -62,15 +65,6 @@ class FileService
         }
     }
 
-//    private function getTemperatureFromApi()
-//    {
-//        $url = 'https://api.openweathermap.org/data/2.5/weather?lat=43.3211301&lon=21.8959232&appid=60825efadeb08154a146559d1016ff34';
-//        $response = file_get_contents($url);
-//        $data = json_decode($response, true);
-//        $tempK = $data['main']['temp'];
-//        return round($tempK - 273.15);
-//    }
-
     private function saveToDatabase($ime, $prezime, $mejl, $tempC, $fileName, $filePath)
     {
         $korisnik = $this->userService->saveUser($ime, $prezime, $mejl, $tempC, $fileName, $filePath);
@@ -81,8 +75,8 @@ class FileService
                 'message' => 'Greška prilikom čuvanja korisnika.',
             ];
         }
-
         return true;
     }
 
 }
+
